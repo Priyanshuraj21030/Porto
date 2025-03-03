@@ -5,6 +5,9 @@ import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import ReCAPTCHA from "react-google-recaptcha";
 
+// Add EmailJS initialization
+emailjs.init("Yx3C1jtOFE_YCwh_v"); // your public key
+
 const Contact: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -44,10 +47,10 @@ const Contact: React.FC = () => {
 
     try {
       const result = await emailjs.sendForm(
-        "service_qqxvxwp",
-        "template_t05eb2c",
+        "service_qqxvxwp", // your EmailJS service ID
+        "template_t05eb2c", // your EmailJS template ID
         formRef.current!,
-        "Yx3C1jtOFE_YCwh_v"
+        "Yx3C1jtOFE_YCwh_v" // your EmailJS public key
       );
 
       if (result.text === "OK") {
@@ -59,9 +62,11 @@ const Contact: React.FC = () => {
           setSubmitSuccess(false);
         }, 5000);
       }
-    } catch (error) {
-      setSubmitError("Failed to send message. Please try again.");
+    } catch (error: any) {
       console.error("Email send error:", error);
+      setSubmitError(
+        error.message || "Failed to send message. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
